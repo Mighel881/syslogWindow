@@ -1,13 +1,14 @@
 static BOOL hasstarted = NO;
-
+@interface UIWindow (log)
+- (id)firstResponder;
+@end
 @interface LogWindow: UIWindow
 
 @end
 
 @implementation LogWindow
--(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event{
-  NSLog(@"LogWindow - pointInside");
-  return NO;
+- (BOOL)_ignoresHitTest {
+  return YES;
 }
 @end
 
@@ -15,17 +16,9 @@ static BOOL hasstarted = NO;
 @end
 
 @implementation UIPassThroughLabel
-
--(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event{ 
-  NSLog(@"UIPassThroughLabel - pointInside");
-  return NO; 
+- (BOOL)_ignoresHitTest {
+  return YES;
 }
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
-  NSLog(@"UIPassThroughLabel - hitTest");
-  return nil;
-}
-
 @end
 
 extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
@@ -59,12 +52,11 @@ static void shareSnap(CFNotificationCenterRef center,
     if( logWindow == nil ){
       logWindow = [[LogWindow alloc] init];//WithFrame:[UIScreen mainScreen].bounds];
       logWindow.backgroundColor = [UIColor clearColor];
-      // logWindow.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.25f];
-      logWindow.userInteractionEnabled = NO;
+      //logWindow.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.25f];
+      logWindow.userInteractionEnabled = YES;
       [logWindow setWindowLevel:UIWindowLevelStatusBar+10000];
-      [logWindow makeKeyAndVisible];
-      // logWindow.exclusiveTouch = YES;
-
+     // [logWindow makeKeyAndVisible];
+      logWindow.hidden = NO;
       l = [[UIPassThroughLabel alloc] initWithFrame:CGRectMake(1,1,318,200)];
       l.textAlignment = NSTextAlignmentLeft;
       l.userInteractionEnabled = NO;

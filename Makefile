@@ -1,5 +1,5 @@
-TARGET=iphone:clang:8.4
-ARCHS = armv7 armv7s arm64
+export ARCHS = armv7 arm64
+export SDKVERSION = 9.2
 
 include theos/makefiles/common.mk
 
